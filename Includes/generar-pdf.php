@@ -1,60 +1,55 @@
 <?php
-// Incluir la biblioteca TCPDF
-require_once('../tcpdf/tcpdf.php');
+require('../fpdf/fpdf.php');
 
-// Obtener los resultados de la consulta
-$resultados = require "../Includes/obtener-tabla.php";
+class PDF extends FPDF
+{
+    // Cabecera de página
+    function Header()
+    {
+        $this->Image('../Images/logo.png', 65, 10, 10);
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 10, 'Listado de Tareas - TaskPlus', 0, 1, 'C');
+        $this->Ln(10);
+    }
 
-
-// Crear una nueva instancia de TCPDF
-$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// Establecer el título del documento
-$pdf->SetTitle('Lista de Tareas');
-
-// Establecer el encabezado y el pie de página
-$pdf->SetHeaderData('', 0, 'TaskPlus', '');
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// Establecer márgenes
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-// Establecer autoajuste del contenido
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-// Establecer el espacio entre líneas
-$pdf->setCellHeightRatio(1.5);
-
-// Agregar una página
-$pdf->AddPage();
-
-// Definir el contenido del PDF
-$html = '<h1>Lista de Tareas</h1>';
-$html .= '<table border="1">
-            <tr>
-                <th>Titulo</th>
-                <th>Descripción</th>
-                <th>Fecha - Hora</th>
-                <th>Estado</th>
-            </tr>';
-// Iterar sobre los resultados y agregar filas a la tabla
-foreach ($resultados as $key => $value) {
-    $html .= '<tr>';
-    $html .= '<td>' . $value['Titulo']. '</td>';
-    $html .= '<td>' . $value['Descripcion'] . '</td>';
-    $html .= '<td>' . $value['Fecha'] . '</td>';
-    $html .= '<td>' . $value['Estado'] . '</td>';
-    $html .= '</tr>';
+    // Pie de página
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Arial', 'I', 8);
+        $this->Cell(0, 10, 'Página ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    }
 }
 
-$html .= '</table>';
+// Crear nuevo PDF
+$pdf = new PDF();
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->SetFont('Arial', '', 12);
 
-// Escribir el contenido HTML en el PDF
-$pdf->writeHTML($html, true, false, true, false, '');
+// Conectar a la base de datos y obtener los datos
+require_once '../Conexion/conexion.php';
+include ('obtener.php');
 
-// Cerrar y generar el PDF
-$pdf->Output('Lista_de_Tareas.pdf', 'I');
+$query = $base->query("SELECT * FROM Tarea WHERE IdCliente = '$idCliente' ORDER BY Fecha DESC");
+
+// Agregar encabezados de la tabla
+$pdf->SetFillColor(200, 220, 255);
+$pdf->Cell(40, 10, 'Titulo', 1, 0, 'C', true);
+$pdf->Cell(80, 10, utf8_decode('Descripción'), 1, 0, 'C', true);
+$pdf->Cell(45, 10, 'Fecha - Hora', 1, 0, 'C', true);
+$pdf->Cell(30, 10, 'Estado', 1, 1, 'C', true);
+
+
+
+// Agregar datos de la tabla
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $pdf->Cell(40, 10, utf8_decode($row['Titulo']), 1);
+    $pdf->Cell(80, 10, utf8_decode($row['Descripcion']), 1);
+    $pdf->Cell(45, 10, $row['Fecha'], 1, 0, 'C'); 
+    $pdf->Cell(30, 10, utf8_decode($row['Estado']), 1, 1, 'C'); 
+}
+
+// Salida del PDF
+$pdf->Output('I', 'tareas.pdf');
 ?>

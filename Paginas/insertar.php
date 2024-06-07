@@ -9,12 +9,13 @@
     <link rel="icon" href="../Images/logo.png">
   </head>
   <body>
-    <nav>
-        <a href="inicio.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#57EBE5"><path d="m287-446.67 240 240L480-160 160-480l320-320 47 46.67-240 240h513v66.66H287Z"/></svg>
-        </a>
-    </nav>
     <div class="container">
+        <div class="mt-5 mb-4">
+            <a href="../Paginas/inicio.php" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#57EBE5"><path d="m287-446.67 240 240L480-160 160-480l320-320 47 46.67-240 240h513v66.66H287Z"/></svg>
+                Regresar
+            </a>
+        </div>
         <div class="row">
             <form action="../Includes/controlador-tareas.php" method="post"> 
                 <div class="mb-3">

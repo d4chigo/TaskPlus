@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav>
-        <h1 class="titulo">TaskPlus</h1>
+        <h1 class="titulo"><a href="inicio.php">TaskPlus</a></h1>
         <ul class="lul">
             <li class="dropdown">
                 <span tabindex="0" class="n-u" id="dropdown-toggle"><?php echo $nombreCliente; ?></span>
@@ -58,7 +58,7 @@
                     <?php
                         require "../Includes/obtener-tabla.php";
 
-                        foreach($resultados as $key => $value){
+                        foreach($query as $key => $value){
                     ?>
                     <tr>
                     <td><?=$value['Titulo']; ?></td>

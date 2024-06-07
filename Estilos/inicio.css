@@ -9,9 +9,13 @@ body {
     color: #0F1010;
 }
 
-.titulo{
+
+
+.titulo a{
+    text-decoration: none;
+    color: #0F1010;
     font-weight: 900;
-    font-size: 30px;
+    font-size: 35px;
 }
 
 li{
@@ -90,4 +94,5 @@ nav{
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    margin: 10px 0;
 }
