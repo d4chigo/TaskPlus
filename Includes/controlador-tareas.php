@@ -37,7 +37,12 @@
                 echo '<div class="alert alert-danger" role="alert">Error en la inserción: ' . $e->getMessage() . '</div>';
             }
         } else {
-            echo '<div class="alert alert-danger" role="alert">Error: el campo está vacío</div>';
+            echo '
+                <script>
+                    alert("Campos vacíos")
+                    window.location.href = "../Paginas/insertar.php";
+                </script>
+            ';
         }
     }
 ?>

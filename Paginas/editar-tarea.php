@@ -56,24 +56,33 @@
         $estado = $_POST['mi_menu'];
         $descripcion = $_POST['des-tarea'];
 
-        $sql = $base->prepare("UPDATE Tarea SET Titulo = :titulo, Estado = :estado, Descripcion = :descripcion WHERE IdTarea = :idtarea");
+        if(!empty($titulo) && !empty($descripcion)){
+            $sql = $base->prepare("UPDATE Tarea SET Titulo = :titulo, Estado = :estado, Descripcion = :descripcion WHERE IdTarea = :idtarea");
         
-        $sql->bindParam(':titulo', $titulo);
-        $sql->bindParam(':estado', $estado);
-        $sql->bindParam(':descripcion', $descripcion);
-        $sql->bindParam(':idtarea', $idTarea);
+            $sql->bindParam(':titulo', $titulo);
+            $sql->bindParam(':estado', $estado);
+            $sql->bindParam(':descripcion', $descripcion);
+            $sql->bindParam(':idtarea', $idTarea);
 
-        if (!$sql->execute()) {
-            $errorInfo = $sql->errorInfo();
-            echo "Error: " . $errorInfo[2];
+            if (!$sql->execute()) {
+                $errorInfo = $sql->errorInfo();
+                echo "Error: " . $errorInfo[2];
+            }
+            
+
+            echo '<script>
+                    alert("Tarea Editada");
+                    window.location.href = "../Paginas/inicio.php";
+                </script>';
+            exit();
+        }else{
+            echo '
+                <script>
+                    alert("Campos vacíos")
+                    window.location.href = "../Paginas/inicio.php";
+                </script>
+            ';
         }
-        
-
-        echo '<script>
-                alert("Tarea Editada");
-                window.location.href = "../Paginas/inicio.php";
-            </script>';
-        exit();
     }
     ?>
     

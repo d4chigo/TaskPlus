@@ -49,25 +49,36 @@
         $email = $_POST['email'];
         $contrasena = $_POST['contrasena'];
 
-        $sql = $base->prepare("UPDATE Cliente SET Nombre = :nombre, Apellido = :apellido, Email = :email, Password = :passwd WHERE IdCliente = :idcliente");
+        if(!empty($nombre) && !empty($apellido) && !empty($email) && !empty($contrasena)){
+            $sql = $base->prepare("UPDATE Cliente SET Nombre = :nombre, Apellido = :apellido, Email = :email, Password = :passwd WHERE IdCliente = :idcliente");
         
-        $sql->bindParam(':nombre', $nombre);
-        $sql->bindParam(':apellido', $apellido);
-        $sql->bindParam(':email', $email);
-        $sql->bindParam(':passwd', $contrasena);
-        $sql->bindParam(':idcliente', $idCliente);
+            $sql->bindParam(':nombre', $nombre);
+            $sql->bindParam(':apellido', $apellido);
+            $sql->bindParam(':email', $email);
+            $sql->bindParam(':passwd', $contrasena);
+            $sql->bindParam(':idcliente', $idCliente);
 
-        if (!$sql->execute()) {
-            $errorInfo = $sql->errorInfo();
-            echo "Error: " . $errorInfo[2];
+            if (!$sql->execute()) {
+                $errorInfo = $sql->errorInfo();
+                echo "Error: " . $errorInfo[2];
+            }
+            
+
+            echo '<script>
+                    alert("Usuario Editado");
+                    window.location.href = "../Includes/cerrar-sesion.php";
+                </script>';
+            exit();
+        }else{
+            echo '
+                <script>
+                    alert("Campos vacíos")
+                    window.location.href = "../Paginas/editar-perfil.php";
+                </script>
+            ';
         }
-        
 
-        echo '<script>
-                alert("Usuario Editado");
-                window.location.href = "../Includes /cerrar-sesion.php";
-            </script>';
-        exit();
+        
     }
     ?>
 
